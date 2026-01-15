@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
   <head>
@@ -35,30 +34,67 @@
       .custom-pin {
         border: none;
         background: transparent;
+        pointer-events: auto !important; /* Habilita eventos no marcador */
+      }
+
+      /* Prylom Custom Tooltip - Ultra Premium & Interativo */
+      .leaflet-tooltip.prylom-custom-tooltip {
+        background: #1a3e4c;
+        border: 1px solid rgba(212, 160, 23, 0.4);
+        border-radius: 2rem;
+        padding: 0;
+        box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6);
+        color: white;
+        font-family: 'Inter', sans-serif;
+        opacity: 1 !important;
+        pointer-events: auto !important; /* Permite interação com os links/botões dentro */
+        z-index: 9999;
+        min-width: 280px;
+        overflow: hidden;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      }
+
+      /* Ponte de Hover: Impede o fechamento ao mover o mouse do marcador para o tooltip */
+      .leaflet-tooltip.prylom-custom-tooltip::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        height: 40px; 
+        background: transparent;
+        pointer-events: auto;
+      }
+
+      .leaflet-tooltip-top.prylom-custom-tooltip::before {
+        border-top-color: #1a3e4c;
+        bottom: -7px;
+      }
+
+      /* Efeito de card dentro do tooltip */
+      .prylom-mini-ad {
+        transition: all 0.3s ease;
+        pointer-events: auto;
+      }
+      .prylom-mini-ad:hover {
+        background: rgba(255, 255, 255, 0.15);
+        transform: translateX(4px);
       }
       
       /* Animações suaves */
       .animate-fadeIn { animation: fadeIn 0.6s ease-out forwards; }
-      @keyframes fadeIn { from { opacity: 0; } to { transform: translateY(0); } }
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
       /* Melhoria de Scroll */
       ::-webkit-scrollbar { width: 6px; }
       ::-webkit-scrollbar-track { background: transparent; }
       ::-webkit-scrollbar-thumb { background: #d4a017; border-radius: 10px; }
 
-      /* Previne zoom automático em iOS e melhora inputs */
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
       input, select, textarea {
         font-size: 16px !important;
-      }
-
-      /* Ajuste de legibilidade para campos de formulário */
-      .form-field-container {
-        transition: transform 0.2s ease, border-color 0.2s ease;
-      }
-      .form-field-container:focus-within {
-        border-color: #d4a017;
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px -5px rgba(212, 160, 23, 0.1);
       }
     </style>
   <script type="importmap">

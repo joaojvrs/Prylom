@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { AppView, AppLanguage, AppCurrency } from './types';
 import LandingPage from './components/LandingPage';
@@ -13,6 +12,7 @@ import ShoppingCenter from './components/ShoppingCenter';
 import ProductDetails from './components/ProductDetails';
 import AdminLogin from './components/AdminLogin';
 import AdminDashboard from './components/AdminDashboard';
+import LegalAgro from './components/LegalAgro';
 import { translations } from './translations';
 
 const App: React.FC = () => {
@@ -82,6 +82,7 @@ const App: React.FC = () => {
           onSelectValuation={() => navigateTo(AppView.VALUATION_CENTER)}
           onSelectMarket={() => navigateTo(AppView.MARKET_TERMINAL)}
           onSelectShopping={() => navigateTo(AppView.SHOPPING_CENTER)}
+          onSelectLegal={() => navigateTo(AppView.LEGAL_AGRO)}
           {...commonProps}
         />;
       case AppView.OWNER_WIZARD:
@@ -109,10 +110,12 @@ const App: React.FC = () => {
         return <AdminDashboard onLogout={() => navigateTo(AppView.LANDING)} {...commonProps} />;
       case AppView.SMART_MAP:
         return <SmartMapReport onBack={() => navigateTo(AppView.OWNER_WIZARD)} {...commonProps} />;
+      case AppView.LEGAL_AGRO:
+        return <LegalAgro onBack={() => navigateTo(AppView.LANDING)} {...commonProps} />;
       case AppView.SUCCESS:
         return <SuccessScreen onRestart={() => navigateTo(AppView.LANDING)} {...commonProps} />;
       default:
-        return <LandingPage {...commonProps} onSelectOwner={() => {}} onSelectBroker={() => {}} onSelectTools={() => {}} onSelectValuation={() => {}} onSelectMarket={() => {}} onSelectShopping={() => {}} />;
+        return <LandingPage {...commonProps} onSelectOwner={() => {}} onSelectBroker={() => {}} onSelectTools={() => {}} onSelectValuation={() => {}} onSelectMarket={() => {}} onSelectShopping={() => {}} onSelectLegal={() => {}} />;
     }
   };
 
@@ -153,7 +156,7 @@ const App: React.FC = () => {
 
            <nav className="flex-1 overflow-y-auto p-8 flex flex-col gap-4 no-scrollbar">
               <div className="p-6 bg-gray-50 rounded-[2rem] border border-gray-100 mb-4">
-                <p className="text-[9px] font-black uppercase text-gray-400 tracking-widest mb-4">Idioma e Moeda</p>
+                <p className="text-[9px] font-black uppercase text-gray-400 tracking-widest mb-4">{t.morningCall}</p>
                 <div className="grid grid-cols-4 gap-2 mb-4">
                   {flags.map(f => (
                     <button 
@@ -179,13 +182,14 @@ const App: React.FC = () => {
               </div>
 
               {[
-                { view: AppView.SHOPPING_CENTER, icon: "🛒", label: t.btnShopping, desc: "Marketplace de Ativos" },
-                { view: AppView.MARKET_TERMINAL, icon: "📈", label: t.btnMarket, desc: "Terminal de Dados" },
-                { view: AppView.TOOLS_HUB, icon: "🛠️", label: t.btnTools, desc: "Agro Inteligência" },
-                { view: AppView.VALUATION_CENTER, icon: "📋", label: t.btnValuation, desc: "Auditoria e Laudos" }
+                { view: AppView.SHOPPING_CENTER, icon: "🛒", label: t.btnShopping, desc: t.shoppingSub },
+                { view: AppView.MARKET_TERMINAL, icon: "📈", label: t.btnMarket, desc: t.livePulse },
+                { view: AppView.LEGAL_AGRO, icon: "📑", label: t.btnLegal, desc: t.legalSub },
+                { view: AppView.TOOLS_HUB, icon: "🛠️", label: t.btnTools, desc: t.economicDueDiligence },
+                { view: AppView.VALUATION_CENTER, icon: "📋", label: t.btnValuation, desc: t.valuationTitle }
               ].map((item, idx) => (
                 <button 
-                  key={idx}
+                  key={item.view}
                   onClick={() => navigateTo(item.view)} 
                   className="flex items-center gap-4 p-6 bg-gray-50 rounded-[2rem] hover:bg-prylom-dark group transition-all duration-300 text-left border border-gray-100 hover:border-prylom-dark"
                 >
@@ -207,7 +211,7 @@ const App: React.FC = () => {
       </div>
 
       {!isMapView && !isAdminView && (
-        <header className={`py-4 px-6 md:px-12 flex justify-between items-center sticky top-0 z-[60] transition-all duration-500 ${isLanding ? 'bg-transparent' : 'bg-white/95 backdrop-blur-xl border-b border-gray-100'}`}>
+        <header className={`py-4 px-6 md:px-12 flex justify-between items-center sticky top-0 z-[60] transition-all duration-500 bg-white border-b border-gray-100 shadow-sm`}>
           <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigateTo(AppView.LANDING)}>
             <div className={`font-black text-2xl md:text-3xl flex items-center tracking-tighter transition-all duration-500 text-[#000080] group-hover:text-prylom-gold`}>
               <span className="text-prylom-gold mr-1">〈</span>
@@ -263,22 +267,33 @@ const App: React.FC = () => {
         <footer className="py-20 px-8 bg-white border-t border-gray-100">
           <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 text-center md:text-left">
             <div className="md:col-span-1 space-y-4">
-              <div className="text-[#000080] font-black text-3xl tracking-tighter">Prylom<span className="text-prylom-gold">.</span></div>
-              <p className="text-gray-500 text-xs leading-relaxed font-medium">Ecossistema Consultivo Estratégico do Agronegócio Brasileiro.</p>
+              <div className="text-[#000080] font-black text-3xl tracking-tighter">
+                Prylom<span className="text-prylom-gold">.</span>
+              </div>
+              <p className="text-gray-500 text-xs leading-relaxed font-medium">
+                {t.footerEcossystem}
+              </p>
             </div>
+            
             <div className="flex flex-col gap-4">
-              <h4 className="font-black uppercase text-[9px] tracking-widest text-prylom-gold">Terminal</h4>
-              <button onClick={() => navigateTo(AppView.SHOPPING_CENTER)} className="text-xs font-bold text-gray-600 hover:text-prylom-dark transition-colors">{t.btnShopping}</button>
-              <button onClick={() => navigateTo(AppView.MARKET_TERMINAL)} className="text-xs font-bold text-gray-600 hover:text-prylom-dark transition-colors">{t.btnMarket}</button>
+              <h4 className="font-black uppercase text-[9px] tracking-[0.4em] text-prylom-gold">{t.footerTerminal}</h4>
+              <div className="flex flex-col gap-2">
+                <button onClick={() => navigateTo(AppView.SHOPPING_CENTER)} className="text-xs font-bold text-gray-600 hover:text-prylom-dark transition-colors w-fit">{t.btnShopping}</button>
+                <button onClick={() => navigateTo(AppView.MARKET_TERMINAL)} className="text-xs font-bold text-gray-600 hover:text-prylom-dark transition-colors w-fit">{t.btnMarket}</button>
+              </div>
             </div>
+            
             <div className="flex flex-col gap-4">
-              <h4 className="font-black uppercase text-[9px] tracking-widest text-prylom-gold">Empresa</h4>
-              <button onClick={() => navigateTo(AppView.LANDING)} className="text-xs font-bold text-gray-600 hover:text-prylom-dark transition-colors">Sobre Nós</button>
-              <button onClick={() => navigateTo(AppView.ADMIN_LOGIN)} className="text-xs font-bold text-gray-600 hover:text-prylom-dark transition-colors">{t.adminTerminal}</button>
+              <h4 className="font-black uppercase text-[9px] tracking-[0.4em] text-prylom-gold">{t.footerCompany}</h4>
+              <div className="flex flex-col gap-2">
+                <button onClick={() => navigateTo(AppView.LANDING)} className="text-xs font-bold text-gray-600 hover:text-prylom-dark transition-colors w-fit">{t.aboutUs}</button>
+                <button onClick={() => navigateTo(AppView.ADMIN_LOGIN)} className="text-xs font-bold text-gray-600 hover:text-prylom-dark transition-colors w-fit">{t.adminTerminal}</button>
+              </div>
             </div>
-            <div className="space-y-4">
-              <h4 className="font-black uppercase text-[9px] tracking-widest text-prylom-gold">Contato</h4>
-              <p className="text-xs font-bold text-gray-600">contato@prylom.com.br</p>
+            
+            <div className="flex flex-col gap-4">
+              <h4 className="font-black uppercase text-[9px] tracking-[0.4em] text-prylom-gold">{t.footerContact}</h4>
+              <p className="text-xs font-bold text-gray-600">{t.contactEmail}</p>
             </div>
           </div>
         </footer>
